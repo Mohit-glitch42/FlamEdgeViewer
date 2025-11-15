@@ -11,11 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-// Make sure Camera2Preview.java is present in the same package
 public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 100;
     private TextureView textureView;
     private Camera2Preview cameraPreview;
+
+    // Native methods: declare only!
+    public native void processFrame(byte[] yPlane, int width, int height);
+    public native String stringFromJNI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,4 @@ public class MainActivity extends AppCompatActivity {
     static {
         System.loadLibrary("native-lib");
     }
-
-    public native String stringFromJNI();
 }
