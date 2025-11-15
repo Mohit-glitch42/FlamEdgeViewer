@@ -1,18 +1,17 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.10.2)
 
-# Path to your OpenCV Android SDK jni folder
+project("com.example.flamedgeviewer")
+
+# Adjust this path to your OpenCV SDK path
 set(OpenCV_DIR "C:/Users/vaibh/OneDrive/Documents/opencv-4.9.0-android-sdk/OpenCV-android-sdk/sdk/native/jni")
 
-# Find OpenCV package with required modules
-find_package(OpenCV REQUIRED core imgproc)
+find_package(OpenCV REQUIRED)
 
-# Include OpenCV headers
-include_directories(${OpenCV_INCLUDE_DIRS})
-
-# Define your native library with source files
+# Specify the relative path to the native source file from the app/ directory
 add_library(native-lib SHARED src/main/cpp/native-lib.cpp)
 
+target_include_directories(native-lib PRIVATE ${OpenCV_INCLUDE_DIRS})
 
+find_library(log-lib log)
 
-# Link your native library against OpenCV and Android log libraries
-target_link_libraries(native-lib ${OpenCV_LIBS} log android)
+target_link_libraries(native-lib ${log-lib} ${OpenCV_LIBS})

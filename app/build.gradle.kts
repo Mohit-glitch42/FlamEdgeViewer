@@ -1,5 +1,7 @@
 plugins {
     id("com.android.application")
+    // Uncomment and adjust if using Kotlin:
+    // id("org.jetbrains.kotlin.android") version "1.8.0" apply false
 }
 
 android {
@@ -33,9 +35,10 @@ android {
 
     externalNativeBuild {
         cmake {
-            path = file("CMakeLists.txt")
+            path = file("CMakeLists.txt") // points to app/CMakeLists.txt
         }
     }
+
 }
 
 dependencies {
