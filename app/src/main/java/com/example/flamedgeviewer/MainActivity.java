@@ -2,6 +2,7 @@ package com.example.flamedgeviewer;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.view.TextureView;
 import android.widget.Toast;
@@ -21,10 +22,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Link to the TextureView in activity_main.xml
         textureView = findViewById(R.id.textureView);
 
-        // Request camera permission if not yet granted
+        // Show JNI test toast
+        String result = stringFromJNI();
+        Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+
+        // Attach TextureView listener
+        textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                tryStartCamera();
+            }
+            @Override public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {}
+            @Override public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) { return false; }
+            @Override public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
+        });
+    }
+
+    private void tryStartCamera() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -34,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Called after permission request result
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -50,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Helper method to start the camera preview using Camera2Preview class
     private void startCamera() {
-        cameraPreview = new Camera2Preview(this, textureView);
-        cameraPreview.start();
+        if (textureView.isAvailable()) {
+            cameraPreview = new Camera2Preview(this, textureView);
+            cameraPreview.start();
+        }
     }
 
     // Ensure camera stops when app is not active
@@ -60,4 +77,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if (cameraPreview != null) cameraPreview.stop();
     }
+
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+    public native String stringFromJNI();
 }
