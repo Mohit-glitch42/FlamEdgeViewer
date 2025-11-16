@@ -52,6 +52,12 @@ FlamEdgeViewer/
 │
 └── README.md
 
+📸 Screenshots
+Android Live Edge Detection Output
+
+Here is the output from the real-time Canny edge detection pipeline running on device-:
+https://drive.google.com/file/d/1MCaBJM5jeOwg7hdpAWQdQwHH2wMTSppk/view?usp=sharing
+
 ⚙️ How to Build
 
 Android App — Build Steps
