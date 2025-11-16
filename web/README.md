@@ -1,0 +1,1 @@
+Quick start: npm install && npm run dev. Put sample-frame.png in public/
